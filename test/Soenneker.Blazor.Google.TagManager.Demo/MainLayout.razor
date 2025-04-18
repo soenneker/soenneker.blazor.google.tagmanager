@@ -1,5 +1,16 @@
-﻿@inherits LayoutComponentBase
-
+﻿@using Soenneker.Blazor.Google.TagManager.Abstract
+@inherits LayoutComponentBase
+@inject IGoogleTagManagerInterop GoogleTagManagerInterop
 <main>
     @Body
 </main>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GoogleTagManagerInterop.Init("GTM-55634LXB");
+    }
+
+
+}

@@ -30,7 +30,7 @@ public class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         _scriptInitializer = new AsyncSingleton(async (token, _) =>
         {
-            await _resourceLoader.ImportModuleAndWaitUntilAvailable(_modulePath, _moduleName, 10, token).NoSync();
+            await _resourceLoader.ImportModuleAndWaitUntilAvailable(_modulePath, _moduleName, 100, token).NoSync();
             return new object();
         });
     }
