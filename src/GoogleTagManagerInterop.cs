@@ -11,7 +11,7 @@ using Soenneker.Utils.AsyncSingleton;
 namespace Soenneker.Blazor.Google.TagManager;
 
 ///<inheritdoc cref="IGoogleTagManagerInterop"/>
-public class GoogleTagManagerInterop : IGoogleTagManagerInterop
+public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 {
     private readonly IJSRuntime _jsRuntime;
     private readonly ILogger<GoogleTagManagerInterop> _logger;
@@ -52,8 +52,6 @@ public class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
     public async ValueTask DisposeAsync()
     {
-        GC.SuppressFinalize(this);
-
         await _resourceLoader.DisposeModule(_modulePath).NoSync();
 
         await _scriptInitializer.DisposeAsync().NoSync();
