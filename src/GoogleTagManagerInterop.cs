@@ -1,12 +1,13 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Soenneker.Blazor.Google.TagManager.Abstract;
 using Soenneker.Blazor.Utils.ResourceLoader.Abstract;
+using Soenneker.Extensions.CancellationTokens;
 using Soenneker.Extensions.ValueTask;
 using Soenneker.Utils.AsyncSingleton;
+using Soenneker.Utils.CancellationScopes;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Soenneker.Blazor.Google.TagManager;
 
@@ -21,6 +22,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
     private const string _modulePath = "Soenneker.Blazor.Google.TagManager/js/googletagmanagerinterop.js";
     private const string _moduleName = "GoogleTagManagerInterop";
+    private readonly CancellationScope _cancellationScope = new();
 
     public GoogleTagManagerInterop(IJSRuntime jSRuntime, ILogger<GoogleTagManagerInterop> logger, IResourceLoader resourceLoader)
     {
@@ -39,15 +41,25 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
     {
         _logger.LogDebug("Initializing GoogleTagManager...");
 
-        await _scriptInitializer.Init(cancellationToken).NoSync();
+        CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
 
-        await _jsRuntime.InvokeVoidAsync($"{_moduleName}.init", cancellationToken, gtmId).NoSync();
+        using (source)
+        {
+            await _scriptInitializer.Init(linked).NoSync();
+
+            await _jsRuntime.InvokeVoidAsync($"{_moduleName}.init", linked, gtmId).NoSync();
+        }
     }
 
     public async ValueTask PushEvent(object eventData, CancellationToken cancellationToken = default)
     {
-        await _scriptInitializer.Init(cancellationToken).NoSync();
-        await _jsRuntime.InvokeVoidAsync($"{_moduleName}.pushEvent", cancellationToken, eventData).NoSync();
+        CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
+
+        using (source)
+        {
+            await _scriptInitializer.Init(linked).NoSync();
+            await _jsRuntime.InvokeVoidAsync($"{_moduleName}.pushEvent", linked, eventData).NoSync();
+        }
     }
 
     public async ValueTask DisposeAsync()
@@ -55,5 +67,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
         await _resourceLoader.DisposeModule(_modulePath).NoSync();
 
         await _scriptInitializer.DisposeAsync().NoSync();
+
+        await _cancellationScope.DisposeAsync().NoSync();
     }
 }
