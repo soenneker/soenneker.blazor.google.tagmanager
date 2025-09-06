@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Soenneker.Blazor.Google.TagManager.Abstract;
 using Soenneker.Blazor.Utils.ResourceLoader.Abstract;
@@ -32,7 +32,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         _scriptInitializer = new AsyncSingleton(async (token, _) =>
         {
-            await _resourceLoader.ImportModuleAndWaitUntilAvailable(_modulePath, _moduleName, 100, token).NoSync();
+            await _resourceLoader.ImportModuleAndWaitUntilAvailable(_modulePath, _moduleName, 100, token);
             return new object();
         });
     }
@@ -45,9 +45,9 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         using (source)
         {
-            await _scriptInitializer.Init(linked).NoSync();
+            await _scriptInitializer.Init(linked);
 
-            await _jsRuntime.InvokeVoidAsync($"{_moduleName}.init", linked, gtmId).NoSync();
+            await _jsRuntime.InvokeVoidAsync($"{_moduleName}.init", linked, gtmId);
         }
     }
 
@@ -57,17 +57,17 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         using (source)
         {
-            await _scriptInitializer.Init(linked).NoSync();
-            await _jsRuntime.InvokeVoidAsync($"{_moduleName}.pushEvent", linked, eventData).NoSync();
+            await _scriptInitializer.Init(linked);
+            await _jsRuntime.InvokeVoidAsync($"{_moduleName}.pushEvent", linked, eventData);
         }
     }
 
     public async ValueTask DisposeAsync()
     {
-        await _resourceLoader.DisposeModule(_modulePath).NoSync();
+        await _resourceLoader.DisposeModule(_modulePath);
 
-        await _scriptInitializer.DisposeAsync().NoSync();
+        await _scriptInitializer.DisposeAsync();
 
-        await _cancellationScope.DisposeAsync().NoSync();
+        await _cancellationScope.DisposeAsync();
     }
 }

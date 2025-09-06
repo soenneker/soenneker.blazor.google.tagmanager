@@ -1,4 +1,4 @@
-﻿using Soenneker.Blazor.Google.TagManager.Abstract;
+using Soenneker.Blazor.Google.TagManager.Abstract;
 using Soenneker.Tests.FixturedUnit;
 using Xunit;
 
