@@ -3,7 +3,6 @@ using Microsoft.JSInterop;
 using Soenneker.Blazor.Google.TagManager.Abstract;
 using Soenneker.Blazor.Utils.ResourceLoader.Abstract;
 using Soenneker.Extensions.CancellationTokens;
-using Soenneker.Extensions.ValueTask;
 using Soenneker.Utils.AsyncSingleton;
 using Soenneker.Utils.CancellationScopes;
 using System.Threading;
