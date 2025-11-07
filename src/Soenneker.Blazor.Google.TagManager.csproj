@@ -42,7 +42,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.0-rc.2.25502.107" />
-        <PackageReference Include="Soenneker.Blazor.Utils.ResourceLoader" Version="4.0.1516" />
+        <PackageReference Include="Soenneker.Blazor.Utils.ResourceLoader" Version="4.0.1518" />
         <PackageReference Include="Soenneker.Extensions.CancellationTokens" Version="4.0.5" />
         <PackageReference Include="Soenneker.Utils.CancellationScopes" Version="4.0.12" />
     </ItemGroup>
