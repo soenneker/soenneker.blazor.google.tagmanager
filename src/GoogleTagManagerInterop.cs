@@ -6,7 +6,7 @@ using Soenneker.Extensions.CancellationTokens;
 using Soenneker.Utils.CancellationScopes;
 using System.Threading;
 using System.Threading.Tasks;
-using Soenneker.Utils.AsyncInitializers;
+using Soenneker.Asyncs.Initializers;
 
 namespace Soenneker.Blazor.Google.TagManager;
 
