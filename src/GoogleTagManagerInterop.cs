@@ -3,10 +3,10 @@ using Microsoft.JSInterop;
 using Soenneker.Blazor.Google.TagManager.Abstract;
 using Soenneker.Blazor.Utils.ResourceLoader.Abstract;
 using Soenneker.Extensions.CancellationTokens;
-using Soenneker.Utils.AsyncSingleton;
 using Soenneker.Utils.CancellationScopes;
 using System.Threading;
 using System.Threading.Tasks;
+using Soenneker.Utils.AsyncInitializers;
 
 namespace Soenneker.Blazor.Google.TagManager;
 
@@ -17,7 +17,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
     private readonly ILogger<GoogleTagManagerInterop> _logger;
     private readonly IResourceLoader _resourceLoader;
 
-    private readonly AsyncSingleton _scriptInitializer;
+    private readonly AsyncInitializer _scriptInitializer;
 
     private const string _modulePath = "Soenneker.Blazor.Google.TagManager/js/googletagmanagerinterop.js";
     private const string _moduleName = "GoogleTagManagerInterop";
@@ -29,10 +29,9 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
         _logger = logger;
         _resourceLoader = resourceLoader;
 
-        _scriptInitializer = new AsyncSingleton(async (token, _) =>
+        _scriptInitializer = new AsyncInitializer(async token =>
         {
             await _resourceLoader.ImportModuleAndWaitUntilAvailable(_modulePath, _moduleName, 100, token);
-            return new object();
         });
     }
 
