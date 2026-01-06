@@ -28,11 +28,12 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
         _jsRuntime = jSRuntime;
         _logger = logger;
         _resourceLoader = resourceLoader;
+        _scriptInitializer = new AsyncInitializer(InitializeScript);
+    }
 
-        _scriptInitializer = new AsyncInitializer(async token =>
-        {
-            await _resourceLoader.ImportModuleAndWaitUntilAvailable(_modulePath, _moduleName, 100, token);
-        });
+    private async ValueTask InitializeScript(CancellationToken token)
+    {
+        await _resourceLoader.ImportModuleAndWaitUntilAvailable(_modulePath, _moduleName, 100, token);
     }
 
     public async ValueTask Init(string gtmId, CancellationToken cancellationToken = default)
@@ -45,7 +46,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
         {
             await _scriptInitializer.Init(linked);
 
-            await _jsRuntime.InvokeVoidAsync($"{_moduleName}.init", linked, gtmId);
+            await _jsRuntime.InvokeVoidAsync("GoogleTagManagerInterop.init", linked, gtmId);
         }
     }
 
@@ -56,7 +57,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
         using (source)
         {
             await _scriptInitializer.Init(linked);
-            await _jsRuntime.InvokeVoidAsync($"{_moduleName}.pushEvent", linked, eventData);
+            await _jsRuntime.InvokeVoidAsync("GoogleTagManagerInterop.pushEvent", linked, eventData);
         }
     }
 
