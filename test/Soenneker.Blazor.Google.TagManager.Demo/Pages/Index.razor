@@ -1,18 +1,9 @@
 @page "/"
-@using Microsoft.Extensions.Logging
 
-@inject ILogger<Index> Logger
-
-<img src="https://user-images.githubusercontent.com/4441470/224455560-91ed3ee7-f510-4041-a8d2-3fc093025112.png" />
-<h1>Soenneker.Blazor.Google.TagManager demo</h1>
-<p>This page demonstrates some of the common usages for the interop library.</p>
-<br />
-
-<hr />
-
-@code{
-
-    protected override void OnInitialized()
-    {
-    }
-}
+<Div Space="Space.Y.Is6">
+    <DemoPanel Title="Google Tag Manager" Description="Placeholder host page for the GTM interop demo. Configure your container in the real app startup.">
+        <Paragraph Margin="Margin.Is0" TextSize="TextSize.Sm">
+            This demo project loads the interop stack and Quark shell only; wire GTM container IDs and events in your application code.
+        </Paragraph>
+    </DemoPanel>
+</Div>

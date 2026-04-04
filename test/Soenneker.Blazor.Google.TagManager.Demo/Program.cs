@@ -10,6 +10,7 @@ using Microsoft.JSInterop;
 using Serilog;
 using Serilog.Debugging;
 using Soenneker.Blazor.Google.TagManager.Registrars;
+using Soenneker.Quark.Gen.Lucide.Generated;
 using Soenneker.Serilog.Sinks.Browser.Blazor.Registrars;
 
 namespace Soenneker.Blazor.Google.TagManager.Demo;
@@ -34,6 +35,7 @@ public class Program
 
             builder.Services.AddGoogleTagManagerInteropAsScoped();
             builder.Services.AddQuarkSuiteAsScoped();
+            builder.Services.AddLucideIconsAsScoped();
 
             WebAssemblyHost host = builder.Build();
 
