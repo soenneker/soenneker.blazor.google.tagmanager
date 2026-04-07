@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Soenneker.Blazor.Google.TagManager.Abstract;
-using Soenneker.Blazor.Utils.ResourceLoader.Registrars;
+using Soenneker.Blazor.Utils.ModuleImport.Registrars;
 
 namespace Soenneker.Blazor.Google.TagManager.Registrars;
 
@@ -15,7 +15,7 @@ public static class GoogleTagManagerInteropRegistrar
     /// </summary>
     public static IServiceCollection AddGoogleTagManagerInteropAsScoped(this IServiceCollection services)
     {
-        services.AddResourceLoaderAsScoped().TryAddScoped<IGoogleTagManagerInterop, GoogleTagManagerInterop>();
+        services.AddModuleImportUtilAsScoped().TryAddScoped<IGoogleTagManagerInterop, GoogleTagManagerInterop>();
 
         return services;
     }

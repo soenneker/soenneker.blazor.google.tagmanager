@@ -1,39 +1,27 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Soenneker.Blazor.Google.TagManager.Abstract;
-using Soenneker.Blazor.Utils.ResourceLoader.Abstract;
+using Soenneker.Blazor.Utils.ModuleImport.Abstract;
 using Soenneker.Extensions.CancellationTokens;
 using Soenneker.Utils.CancellationScopes;
 using System.Threading;
 using System.Threading.Tasks;
-using Soenneker.Asyncs.Initializers;
 
 namespace Soenneker.Blazor.Google.TagManager;
 
 ///<inheritdoc cref="IGoogleTagManagerInterop"/>
 public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 {
-    private readonly IJSRuntime _jsRuntime;
     private readonly ILogger<GoogleTagManagerInterop> _logger;
-    private readonly IResourceLoader _resourceLoader;
+    private readonly IModuleImportUtil _moduleImportUtil;
 
-    private readonly AsyncInitializer _scriptInitializer;
-
-    private const string _modulePath = "Soenneker.Blazor.Google.TagManager/js/googletagmanagerinterop.js";
-    private const string _moduleName = "GoogleTagManagerInterop";
+    private const string _modulePath = "/_content/Soenneker.Blazor.Google.TagManager/js/googletagmanagerinterop.js";
     private readonly CancellationScope _cancellationScope = new();
 
-    public GoogleTagManagerInterop(IJSRuntime jSRuntime, ILogger<GoogleTagManagerInterop> logger, IResourceLoader resourceLoader)
+    public GoogleTagManagerInterop(ILogger<GoogleTagManagerInterop> logger, IModuleImportUtil moduleImportUtil)
     {
-        _jsRuntime = jSRuntime;
         _logger = logger;
-        _resourceLoader = resourceLoader;
-        _scriptInitializer = new AsyncInitializer(InitializeScript);
-    }
-
-    private async ValueTask InitializeScript(CancellationToken token)
-    {
-        _ = await _resourceLoader.ImportModule(_modulePath, token);
+        _moduleImportUtil = moduleImportUtil;
     }
 
     public async ValueTask Init(string gtmId, CancellationToken cancellationToken = default)
@@ -44,9 +32,8 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         using (source)
         {
-            await _scriptInitializer.Init(linked);
-
-            await _jsRuntime.InvokeVoidAsync("GoogleTagManagerInterop.init", linked, gtmId);
+            IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
+            await module.InvokeVoidAsync("init", linked, gtmId);
         }
     }
 
@@ -56,16 +43,14 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         using (source)
         {
-            await _scriptInitializer.Init(linked);
-            await _jsRuntime.InvokeVoidAsync("GoogleTagManagerInterop.pushEvent", linked, eventData);
+            IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
+            await module.InvokeVoidAsync("pushEvent", linked, eventData);
         }
     }
 
     public async ValueTask DisposeAsync()
     {
-        await _resourceLoader.DisposeModule(_modulePath);
-
-        await _scriptInitializer.DisposeAsync();
+        await _moduleImportUtil.DisposeContentModule(_modulePath);
 
         await _cancellationScope.DisposeAsync();
     }
