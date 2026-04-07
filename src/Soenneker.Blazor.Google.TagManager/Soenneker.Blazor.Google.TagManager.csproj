@@ -45,9 +45,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.5" />
-        <PackageReference Include="Soenneker.Blazor.Utils.ModuleImport" Version="4.0.1790" />
-        <PackageReference Include="Soenneker.Extensions.CancellationTokens" Version="4.0.16" />
-        <PackageReference Include="Soenneker.Utils.CancellationScopes" Version="4.0.36" />
     </ItemGroup>
 </Project>
 
