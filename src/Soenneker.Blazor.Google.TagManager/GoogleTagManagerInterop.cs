@@ -15,7 +15,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
     private readonly ILogger<GoogleTagManagerInterop> _logger;
     private readonly IModuleImportUtil _moduleImportUtil;
 
-    private const string _modulePath = "/_content/Soenneker.Blazor.Google.TagManager/js/googletagmanagerinterop.js";
+    private const string _modulePath = "_content/Soenneker.Blazor.Google.TagManager/js/googletagmanagerinterop.js";
     private readonly CancellationScope _cancellationScope = new();
 
     public GoogleTagManagerInterop(ILogger<GoogleTagManagerInterop> logger, IModuleImportUtil moduleImportUtil)
