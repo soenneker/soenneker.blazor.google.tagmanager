@@ -48,6 +48,6 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.6" />
-        <PackageReference Include="Soenneker.Blazor.Utils.ModuleImport" Version="4.0.1794" />
+        <PackageReference Include="Soenneker.Blazor.Utils.ModuleImport" Version="4.0.1795" />
     </ItemGroup>
 </Project>
