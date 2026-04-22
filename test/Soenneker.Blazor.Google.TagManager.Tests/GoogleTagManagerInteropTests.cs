@@ -1,20 +1,19 @@
 using Soenneker.Blazor.Google.TagManager.Abstract;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Blazor.Google.TagManager.Tests;
 
-[Collection("Collection")]
-public class GoogleTagManagerInteropTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public class GoogleTagManagerInteropTests : HostedUnitTest
 {
     private readonly IGoogleTagManagerInterop _blazorlibrary;
 
-    public GoogleTagManagerInteropTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public GoogleTagManagerInteropTests(Host host) : base(host)
     {
         _blazorlibrary = Resolve<IGoogleTagManagerInterop>(true);
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
