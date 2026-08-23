@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Soenneker.Blazor.Google.TagManager.Abstract;
+using Soenneker.Blazor.Google.TagManager.Models;
 using Soenneker.Blazor.Utils.ModuleImport.Abstract;
 using Soenneker.Extensions.CancellationTokens;
 using Soenneker.Utils.CancellationScopes;
@@ -45,6 +46,28 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
         {
             IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
             await module.InvokeVoidAsync("pushEvent", linked, eventData);
+        }
+    }
+
+    public async ValueTask SetDefaultConsent(GoogleTagManagerConsentSettings settings, CancellationToken cancellationToken = default)
+    {
+        CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
+
+        using (source)
+        {
+            IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
+            await module.InvokeVoidAsync("setDefaultConsent", linked, settings);
+        }
+    }
+
+    public async ValueTask UpdateConsent(GoogleTagManagerConsentSettings settings, CancellationToken cancellationToken = default)
+    {
+        CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
+
+        using (source)
+        {
+            IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
+            await module.InvokeVoidAsync("updateConsent", linked, settings);
         }
     }
 
