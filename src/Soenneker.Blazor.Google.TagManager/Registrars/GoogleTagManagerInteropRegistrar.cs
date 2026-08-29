@@ -13,6 +13,8 @@ public static class GoogleTagManagerInteropRegistrar
     /// <summary>
     /// Adds <see cref="IGoogleTagManagerInterop"/> as a scoped service. <para/>
     /// </summary>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddGoogleTagManagerInteropAsScoped(this IServiceCollection services)
     {
         services.AddModuleImportUtilAsScoped().TryAddScoped<IGoogleTagManagerInterop, GoogleTagManagerInterop>();
