@@ -5,6 +5,7 @@ using Soenneker.Blazor.Google.TagManager.Models;
 using Soenneker.Blazor.Utils.ModuleImport.Abstract;
 using Soenneker.Extensions.CancellationTokens;
 using Soenneker.Utils.CancellationScopes;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,6 +28,10 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
     public async ValueTask Init(string gtmId, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(gtmId))
+            throw new ArgumentException("The GTM container ID cannot be null, empty, or whitespace.", nameof(gtmId));
+
+        gtmId = gtmId.Trim();
         _logger.LogDebug("Initializing GoogleTagManager...");
 
         CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
@@ -40,6 +45,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
     public async ValueTask PushEvent(object eventData, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(eventData);
         CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
 
         using (source)
@@ -51,6 +57,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
     public async ValueTask SetDefaultConsent(GoogleTagManagerConsentSettings settings, CancellationToken cancellationToken = default)
     {
+        ValidateConsent(settings);
         CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
 
         using (source)
@@ -62,6 +69,7 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
     public async ValueTask UpdateConsent(GoogleTagManagerConsentSettings settings, CancellationToken cancellationToken = default)
     {
+        ValidateConsent(settings);
         CancellationToken linked = _cancellationScope.CancellationToken.Link(cancellationToken, out CancellationTokenSource? source);
 
         using (source)
@@ -69,6 +77,14 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
             IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
             await module.InvokeVoidAsync("updateConsent", linked, settings);
         }
+    }
+
+    private static void ValidateConsent(GoogleTagManagerConsentSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        if (settings.WaitForUpdateMilliseconds < 0)
+            throw new ArgumentOutOfRangeException(nameof(settings), "WaitForUpdateMilliseconds cannot be negative.");
     }
 
     /// <summary>
