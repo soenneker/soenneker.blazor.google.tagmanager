@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Soenneker.Blazor.Google.TagManager;
 
-///<inheritdoc cref="IGoogleTagManagerInterop"/>
+/// <inheritdoc cref="IGoogleTagManagerInterop"/>
 public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 {
     private readonly ILogger<GoogleTagManagerInterop> _logger;
