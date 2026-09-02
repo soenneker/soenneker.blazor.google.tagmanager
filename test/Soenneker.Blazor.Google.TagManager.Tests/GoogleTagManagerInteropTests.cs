@@ -1,3 +1,4 @@
+using System.Threading;
 using Microsoft.JSInterop;
 using Soenneker.Blazor.Google.TagManager.Abstract;
 using Soenneker.Blazor.Google.TagManager.Models;
@@ -20,7 +21,7 @@ public class GoogleTagManagerInteropTests : HostedUnitTest
     }
 
     [Test]
-    public async Task Consent_mode_v2_can_be_invoked()
+    public async Task Consent_mode_v2_can_be_invoked(CancellationToken cancellationToken)
     {
         var settings = new GoogleTagManagerConsentSettings
         {
@@ -31,7 +32,7 @@ public class GoogleTagManagerInteropTests : HostedUnitTest
             WaitForUpdateMilliseconds = 500
         };
 
-        await _blazorlibrary.SetDefaultConsent(settings);
-        await _blazorlibrary.UpdateConsent(settings);
+        await _blazorlibrary.SetDefaultConsent(settings, cancellationToken: cancellationToken);
+        await _blazorlibrary.UpdateConsent(settings, cancellationToken: cancellationToken);
     }
 }
