@@ -21,7 +21,7 @@ public class GoogleTagManagerInteropTests : HostedUnitTest
     }
 
     [Test]
-    public async Task Consent_mode_v2_can_be_invoked(CancellationToken cancellationToken)
+    public async ValueTask Consent_mode_v2_can_be_invoked(CancellationToken cancellationToken)
     {
         var settings = new GoogleTagManagerConsentSettings
         {
