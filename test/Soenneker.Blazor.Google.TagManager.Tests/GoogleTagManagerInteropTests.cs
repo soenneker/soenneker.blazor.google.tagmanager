@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Microsoft.JSInterop;
 using Soenneker.Blazor.Google.TagManager.Abstract;
@@ -16,7 +17,14 @@ public class GoogleTagManagerInteropTests : HostedUnitTest
     public GoogleTagManagerInteropTests(Host host) : base(host)
     {
         var jsRuntime = (IMockJsRuntime) Resolve<IJSRuntime>(true);
-        jsRuntime.SetupMockResult<IJSObjectReference>("import", new TestJsObjectReference());
+        try
+        {
+            jsRuntime.SetupMockResult<IJSObjectReference>("import", new TestJsObjectReference());
+        }
+        catch (Exception exception)
+        {
+            throw new InvalidOperationException("Could not configure the Tag Manager module import mock.", exception);
+        }
         _blazorlibrary = Resolve<IGoogleTagManagerInterop>(true);
     }
 

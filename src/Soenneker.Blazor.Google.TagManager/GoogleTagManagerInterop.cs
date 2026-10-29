@@ -38,8 +38,15 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         using (source)
         {
-            IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
-            await module.InvokeVoidAsync("init", linked, gtmId);
+            try
+            {
+                IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
+                await module.InvokeVoidAsync("init", linked, gtmId);
+            }
+            catch (JSException exception)
+            {
+                throw new JSException($"JavaScript operation 'GoogleTagManagerInterop.Init' failed: {exception.Message}", exception);
+            }
         }
     }
 
@@ -50,8 +57,15 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         using (source)
         {
-            IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
-            await module.InvokeVoidAsync("pushEvent", linked, eventData);
+            try
+            {
+                IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
+                await module.InvokeVoidAsync("pushEvent", linked, eventData);
+            }
+            catch (JSException exception)
+            {
+                throw new JSException($"JavaScript operation 'GoogleTagManagerInterop.PushEvent' failed: {exception.Message}", exception);
+            }
         }
     }
 
@@ -62,8 +76,15 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         using (source)
         {
-            IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
-            await module.InvokeVoidAsync("setDefaultConsent", linked, settings);
+            try
+            {
+                IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
+                await module.InvokeVoidAsync("setDefaultConsent", linked, settings);
+            }
+            catch (JSException exception)
+            {
+                throw new JSException($"JavaScript operation 'GoogleTagManagerInterop.SetDefaultConsent' failed: {exception.Message}", exception);
+            }
         }
     }
 
@@ -74,8 +95,15 @@ public sealed class GoogleTagManagerInterop : IGoogleTagManagerInterop
 
         using (source)
         {
-            IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
-            await module.InvokeVoidAsync("updateConsent", linked, settings);
+            try
+            {
+                IJSObjectReference module = await _moduleImportUtil.GetContentModuleReference(_modulePath, linked);
+                await module.InvokeVoidAsync("updateConsent", linked, settings);
+            }
+            catch (JSException exception)
+            {
+                throw new JSException($"JavaScript operation 'GoogleTagManagerInterop.UpdateConsent' failed: {exception.Message}", exception);
+            }
         }
     }
 
