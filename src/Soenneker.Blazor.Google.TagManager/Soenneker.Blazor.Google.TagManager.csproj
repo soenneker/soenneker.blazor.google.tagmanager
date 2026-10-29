@@ -48,4 +48,7 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="11.0.0-rc.3.26522.148" />
         <PackageReference Include="Soenneker.Blazor.Utils.ModuleImport" Version="11.0.1938" />
     </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Soenneker.Blazor.Extensions.IJSObjectReferences" Version="11.0.2" />
+    </ItemGroup>
 </Project>
